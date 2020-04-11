@@ -1,0 +1,18 @@
+1.使用hash结果存储AriticleVO，而不是使用string存储其JSON字符串。
+    因为需要频繁地局部更新ArticleVO的votes域。
+    如果使用string存储json字符串，更新时，就需要全部读取再全部写入。
+    即，hash支持局部更新域，但string不行！
+
+
+2.zset是redis中支持排序的数据结构。可用zset实现排序查询。
+        zset：          sortedArticles:time      按时间顺序
+        zset：          sortedArticles:votes     按票数顺序
+        上面两个zset分别是 按时间顺序 和 按票数顺序 保存所有文章id
+
+        因为上面两个zset key中“按顺序”保存了“所有”文章id
+        所以，不需要再为每个标签设置两个zset key来“按顺序”保存“文章id”，数据冗余了，
+        除了冗余，在更新票数的时候还得多更新一个Key，因此舍去这种设计。
+        只需要一个set key保存该标签所有文章，然后与zset key做交集，
+        目标key也是zset，即可达到排序的目的！
+
+3.想要实现排序查询，就要使用zset。做交集即可，不用存储冗余数据。

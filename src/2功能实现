@@ -1,0 +1,36 @@
+有哪些vo类？(这是存储在redis中的对象)
+文章ArticleVO 标签TagVO  用户UserVO
+
+
+有哪些bean？(这是返回给前台的对象)
+ArticleBean:会该文章有哪些标签
+TagBean:会保存该标签有哪些文章
+
+存储vo是使用Hash还是String？
+1.如果经常需要访问对象的一个或几个域（特别是域很多时），采用hash更好。它提供了hget 和 hmget。
+2.如果经常需要把所有域数据都取出来，使用string更好。
+3.使用hash可以局部更新域；使用string想要更新一个域必须先全部读入，再全部写入（更新属性要操作整个数据）
+
+
+数据结构选取：
+1.存储article对象用hash（因为投票要局部更新votes字段，使用string存储JSON字符串每次都要全部读入再全部写入）：
+    hash： article:id          //保存文章基本信息
+    string:  articleIdSeq     //用于生成文章id
+
+2.存储tag、user对象用string：（因为不需要频繁更新）
+   string：        tag:id    //标签基本信息
+   string:         tagIdSeq //用于生成标签id
+   string：        user:id           //用户基本信息
+   string:         userIdSeq    //用于生成用户id
+   //zset：          tag:articles:time:id    //存储文章id，该标签有哪些文章，score是文章发布时间（使用有序集合，可以排序、分页查询）
+   //zset：          tag:articles:vote:id    //存储文章id，该标签有哪些文章，score是文章票数（使用有序集合，可以排序、分页查询）
+
+   重点：可不需要上面两个zset key，只要一个key，否则数据冗余了
+   set：          tag:articles:id         //存储文章id，该标签有哪些文章
+   那如何实现给定标签的文章排序呢？
+   与下方的articles:time:id和articles:vote:id两个key做交集就行！！！
+
+3.其他key
+   zset：          sortedArticles:time    //存储文章id，score是文章发布时间（使用有序集合，可以排序、分页查询）
+   zset：          sortedArticles:votes    //存储文章id，score是文章票数（使用有序集合，可以排序、分页查询）
+   set             users:voted:ArticleId  //存储用户id，记录一篇文章有哪些用户投票

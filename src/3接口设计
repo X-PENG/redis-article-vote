@@ -1,0 +1,42 @@
+---------------------文章管理---------------------
+1、发布文章：
+/article/publish?title=&linkUrl=&userId=&tags=  返回ArticleBean
+2、get一篇文章：
+/article/get?id=                                返回ArticleBean
+3、get得票数前3的文章
+/article/votesTop/{3}                           返回List<ArticleBean>
+4、get得票数后3的文章
+/article/votesTail/{3}                          返回List<ArticleBean>
+5、get最新的3篇文章
+/article/latest/{3}                             返回List<ArticleBean>
+6、分页查询文章，按得票数排序(0升序1降序)
+/article/pageOnVotes?page=&pageSize=&dirction=  返回List<ArticleBean>
+7、分页查询文章，按时间排序(0升序1降序)
+/article/pageOnTime?page=&pageSize=&dirction=   返回List<ArticleBean>
+8、get一个标签得票前3的文章
+/article/votesTopOnTag/{tagId}/{3}              返回List<ArticleBean>
+9、get一个标签最新的3篇文章
+/article/latestOnTag/{tagId}/{3}                返回List<ArticleBean>
+10、用户给一篇文章投票，一个用户只能投一票
+/article/vote/{userId}/{articleId}              返回ArticleBean
+11、用户给多篇文章投票
+/article/vote/{userId}?aId=&aId=                返回List<ArticleBean>
+12、查询一个用户发布的所有文章，按时间降序排序
+/article/getAllByUser/{userId}                  返回List<ArticleBean>
+
+
+------------------------用户管理---------------------
+1、添加用户
+/user/add?username=                             返回UserVO
+2、get一个用户
+/user/{id}                                      返回UserVO
+3、get所有用户
+/user/getAll                                    返回List<UserVO>
+
+------------------------标签管理---------------------
+1、添加标签
+/tag/add?topic=&description=                    返回TagVO
+2、get标签基本信息
+/tag/basic/{id}                                 返回TagVO
+3、get所有标签基本信息
+/tag/basic/getAll                               返回List<TagVO>
