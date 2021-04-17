@@ -1,5 +1,7 @@
 package com.peng.redistest3;
 
+import com.alibaba.fastjson.JSON;
+import com.peng.redistest3.vo.TagVO;
 import org.junit.Test;
 
 import java.text.SimpleDateFormat;
@@ -35,5 +37,10 @@ public class T1 {
         for(String id:ids){
             System.out.println(id);
         }
+    }
+    @Test
+    public void t4(){
+        TagVO tagVO = JSON.parseObject(null, TagVO.class);
+        System.out.println(tagVO);
     }
 }

@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * 标签管理
+ * 添加、查看指定标签、查看所有标签
+ */
 @RestController
 @RequestMapping("/tag")
 public class TagController {

@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * 用户管理
+ * 添加用户、查看一个用户、查看所有用户
+ */
 @RestController
 @RequestMapping("/user")
 public class UserController {

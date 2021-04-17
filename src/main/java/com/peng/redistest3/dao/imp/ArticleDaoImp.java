@@ -90,7 +90,7 @@ public class ArticleDaoImp implements ArticleDao {
      */
     @Override
     public List<ArticleVO> getTopNInTag(int n, long tagId) {
-        String destKey="tag:temp:votes:"+tagId;
+        String destKey="tag:temp:votes:"+tagId;//临时key
         return getByTag(KeyDefinition.ZSET_KEY_FOR_ATICLES_SORTED_ON_VOTES,destKey,tagId,n);
     }
 
@@ -132,6 +132,7 @@ public class ArticleDaoImp implements ArticleDao {
         return list;
     }
 
+    //使用反射读取非static静态字段的名字，和值。
     private Map<String, String> generateMap(ArticleVO articleVO) throws IllegalAccessException {
         Map<String, String> map=new HashMap<>();
         Class clazz=ArticleVO.class;
@@ -172,7 +173,7 @@ public class ArticleDaoImp implements ArticleDao {
     }
 
     private List<ArticleVO> getByTag(String zsetKey,String destKey,long tagId,int n){
-        String key1=KeyDefinition.SET_KEY_FOR_TAG_ATICLES_PREFIX+tagId;
+        String key1=KeyDefinition.SET_KEY_FOR_TAG_ATICLES_PREFIX+tagId;//那个标签的文章id集合
         String key2=zsetKey;
         /**
          *

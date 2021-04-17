@@ -11,56 +11,70 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * 文章管理
+ */
 @RestController
 @RequestMapping("/article")
 public class ArticleController {
     @Autowired
     private ArticleService articleService;
 
+    //发布文章，参与投票
     @GetMapping("/publish")
     public ArticleBean publish(ArticleVO articleVO) throws IllegalAccessException {
         return articleService.addArticle(articleVO);
     }
+
+    //得到一篇文章信息
     @GetMapping("/get")
     public ArticleBean getOne(long id){
         return articleService.getOne(id);
     }
 
+    //一个用户给一篇文章投票
     @GetMapping("/vote/{userId}/{articleId}")
     public ArticleBean voteOne(@PathVariable("userId") long userId,@PathVariable("articleId") long articleId){
         return articleService.voteOne(userId,articleId);
     }
 
+    //一个用户给多篇文章投票
     @GetMapping("/vote/{userId}")
     public List<ArticleBean> voteMulti(@PathVariable("userId") long userId, long[] aId){
         return articleService.voteMulti(userId,aId);
     }
 
+    //投票数top n的所有文章信息
     @GetMapping("/votesTop/{n}")
     public List<ArticleBean> votesTop(@PathVariable int n){
         return articleService.getTopN(n);
     }
 
+    //最新的n篇文章
     @GetMapping("/latest/{n}")
     public List<ArticleBean> latest(@PathVariable int n){
         return articleService.getLatestN(n);
     }
 
+    //按投票顺序，分页查看文章信息
     @GetMapping("/pageOnVotes")
     public List<ArticleBean> pageOnVotes(int page,int pageSize,int direction){
         return articleService.pageOnVotes(page,pageSize,direction);
     }
 
+    //按发布时间顺序，分页查看文章信息
     @GetMapping("/pageOnTime")
     public List<ArticleBean> pageOnTime(int page,int pageSize,int direction){
         return articleService.pageOnTime(page,pageSize,direction);
     }
 
+    //get一个标签的投票top n文章
     @GetMapping("/votesTopOnTag/{tagId}/{n}")
     public List<ArticleBean> votesTopOnTag(@PathVariable long tagId,@PathVariable int n){
         return articleService.getTopNInTag(n,tagId);
     }
 
+    //get一个标签的发布时间top n文章
     @GetMapping("/latestOnTag/{tagId}/{n}")
     public List<ArticleBean> latestOnTag(@PathVariable long tagId,@PathVariable int n){
         return articleService.getLatestNInTag(n,tagId);
